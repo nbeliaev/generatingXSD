@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<commonInvoiceInput>
+	<generalInvoiceInfo>
+		<invoiceType>01GTKT</invoiceType>
+		<templateCode>01GTKT0/001</templateCode>
+		<currencyCode>VND</currencyCode>
+		<adjustmentType>1</adjustmentType>
+		<paymentStatus>true</paymentStatus>
+		<paymentType>TM</paymentType>
+		<paymentTypeName>TM</paymentTypeName>
+		<cusGetInvoiceRight>true</cusGetInvoiceRight>
+		<buyerIdNo>123456789</buyerIdNo>
+		<buyerIdType>1</buyerIdType>
+	</generalInvoiceInfo>
+	<buyerInfo>
+		<buyerName>Lương Thị Huyền</buyerName>
+		<buyerLegalName></buyerLegalName>
+		<buyerTaxCode>3901212654</buyerTaxCode>
+		<buyerAddressLine>HN VN</buyerAddressLine>
+		<buyerPhoneNumber>09880830406</buyerPhoneNumber>
+		<buyerEmail></buyerEmail>
+		<buyerIdNo>123456789</buyerIdNo>
+		<buyerIdType>1</buyerIdType>
+	</buyerInfo>
+	<sellerInfo>
+		<sellerLegalName>Supplier perfom test 1</sellerLegalName>
+		<sellerTaxCode>0100109106-501</sellerTaxCode>
+		<sellerAddressLine>test</sellerAddressLine>
+		<sellerPhoneNumber>0123456789</sellerPhoneNumber>
+		<sellerEmail>PerformanceTest1@viettel.com.vn</sellerEmail>
+		<sellerBankName>vtbank</sellerBankName>
+		<sellerBankAccount>23423424</sellerBankAccount>
+	</sellerInfo>
+	<payments>
+		<paymentMethodName>TM</paymentMethodName>
+	</payments>
+	<deliveryInfo />
+	<itemInfo>
+		<lineNumber>1</lineNumber>
+		<itemCode>ENGLISH_COURSE</itemCode>
+		<itemName>Khóa học tiếng anh</itemName>
+		<unitName>khóa học</unitName>
+		<unitPrice>3500000</unitPrice>
+		<quantity>10</quantity>
+		<itemTotalAmountWithoutTax>35000000</itemTotalAmountWithoutTax>
+		<taxPercentage>10</taxPercentage>
+		<taxAmount>3500000</taxAmount>
+		<discount>0</discount>
+		<itemDiscount>0</itemDiscount>
+	</itemInfo>
+	<summarizeInfo>
+		<sumOfTotalLineAmountWithoutTax>35000000</sumOfTotalLineAmountWithoutTax>
+		<totalAmountWithoutTax>35000000</totalAmountWithoutTax>
+		<totalTaxAmount>3500000</totalTaxAmount>
+		<totalAmountWithTax>38500000</totalAmountWithTax>
+		<totalAmountWithTaxInWords>Ba mươi tám triệu năm trăm nghìn đồng chẵn</totalAmountWithTaxInWords>
+		<discountAmount>0</discountAmount>
+		<taxPercentage>10</taxPercentage>
+	</summarizeInfo>
+	<taxBreakdowns>
+		<taxPercentage>10</taxPercentage>
+		<taxableAmount>35000000</taxableAmount>
+		<taxAmount>3500000</taxAmount>
+	</taxBreakdowns>
+</commonInvoiceInput>
