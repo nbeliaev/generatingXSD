@@ -16,48 +16,56 @@ import java.nio.file.Paths;
 
 public class XsdSchema {
 
-    private File sourceFile;
-    private boolean printHelp = false;
-    private final String nameSpace = "";
-    private final Inst2XsdOptions schema = new Inst2XsdOptions();
+    private final File SOURCE_FILE;
+    private final File OUTPUT_FILE;
+    private final String NAME_SPACE;
+    private final int SCHEMA_DESIGN;
 
     public static void main(String[] args) throws IOException, XmlException {
-	// write your code here
-        // delete setters and getters
+
         XsdSchema xsdSchema = new XsdSchema(args);
-        /*if (xsdSchema.getPrintHelp()) {
-            System.out.println("HELP");
-            return;
-        } else {
-            xsdSchema.checkSourceFile();
-        }
+        xsdSchema.checkSourceFile();
 
-        //System.out.println(xsdSchema.getSourceFile().getPath());
+        XmlObject xmlObject = XmlObject.Factory.parse(xsdSchema.SOURCE_FILE);
+        SchemaDocument schema = xsdSchema.getSchema(xmlObject);
+        if (schema != null)
+            schema.save(xsdSchema.OUTPUT_FILE);
 
-        XmlObject [] xmlObjects = new XmlObject[1];
-        xmlObjects[0] = XmlObject.Factory.parse(xsdSchema.getSourceFile());
-        SchemaDocument schema = xsdSchema.getSchema(xmlObjects);
-        System.out.println(schema);*/
     }
 
-    private SchemaDocument getSchema(XmlObject [] xmlObjects) {
+    private SchemaDocument getSchema(XmlObject xmlObject) {
+
         Inst2XsdOptions inst2XsdOptions = new Inst2XsdOptions();
-        inst2XsdOptions.setDesign(Inst2XsdOptions.DESIGN_VENETIAN_BLIND);
+        inst2XsdOptions.setDesign(SCHEMA_DESIGN);
+
+        XmlObject [] xmlObjects = new XmlObject[1];
+        xmlObjects[0] = xmlObject;
+
         SchemaDocument [] schemaDocuments = Inst2Xsd.inst2xsd(xmlObjects, inst2XsdOptions);
         if (schemaDocuments != null && schemaDocuments.length > 0) {
+            schemaDocuments[0].getSchema().setTargetNamespace(NAME_SPACE);
             return schemaDocuments[0];
         }
-
         return null;
     }
 
-    XsdSchema(String[] args) {
+    private XsdSchema(String[] args) {
 
         Options options = new Options();
 
-        Option option = new Option("i", "input", true, "input file path");
-        option.setRequired(true);
-        options.addOption(option);
+        Option inputOption = new Option("i", "input", true, "input xml file path");
+        inputOption.setRequired(true);
+        options.addOption(inputOption);
+
+        Option outputOption = new Option("o", "output", true, "output xsd file path");
+        options.addOption(outputOption);
+
+        Option nameSpaceOption = new Option("n", "name-space", true, "target name space");
+        options.addOption(nameSpaceOption);
+
+        Option schemaOption = new Option("s", "schema-design", true,
+                "schema design: 1-Russian Doll, 2-Salami slice, 3-Venetian blind");
+        options.addOption(schemaOption);
 
         CommandLineParser commandLineParser = new DefaultParser();
         HelpFormatter helpFormatter = new HelpFormatter();
@@ -67,86 +75,49 @@ public class XsdSchema {
             cmd = commandLineParser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            helpFormatter.printHelp("bla bla", options);
+            helpFormatter.printHelp("This tool creates xsd file from xml.", options);
             System.exit(1);
         }
 
-        String input = cmd.getOptionValue("input");
-        System.out.println(input);
+        SOURCE_FILE = new File(cmd.getOptionValue("input"));
 
-        /*int argsCount = args.length;
-        String pathToFile = "";
-
-        if (argsCount == 0) {
-            return;
+        String outputFile = cmd.getOptionValue("output");
+        if (outputFile == null) {
+            this.OUTPUT_FILE = new File(SOURCE_FILE.getParent() + File.separatorChar + "schema.xsd");
+        } else {
+            this.OUTPUT_FILE = new File(outputFile);
         }
 
-        for (int i=0; i < args.length; i++) {
+        String ns = cmd.getOptionValue("name-space");
+        NAME_SPACE = ns != null ? ns : "http://v8.default.com";
 
-            switch (args[i]) {
-                case "-i":
-                    pathToFile = args.length > 1 ? args[i + 1]:"";
+        String schema = cmd.getOptionValue("schema-design");
+        if (schema == null) {
+            this.SCHEMA_DESIGN = 3;
+        }
+        else {
+            switch (schema) {
+                case "1":
+                    this.SCHEMA_DESIGN = Inst2XsdOptions.DESIGN_RUSSIAN_DOLL;
                     break;
-                case "--input":
-                    pathToFile = args.length > 1 ? args[i + 1]:"";
+                case "2":
+                    this.SCHEMA_DESIGN = Inst2XsdOptions.DESIGN_SALAMI_SLICE;
                     break;
-                case "-h":
-                    setPrintHelp(true);
+                case "3":
+                    this.SCHEMA_DESIGN = Inst2XsdOptions.DESIGN_VENETIAN_BLIND;
                     break;
-                case "--help":
-                    setPrintHelp(true);
-                    break;
-                case "-nm":
-                    //name space
-                    break;
-                case "--namespace":
-                    // name space
-                    break;
-                case "-s":
-                    //schema
-                    break;
-                case "--schema":
-                    // schema
-                    break;
-            }
-
-            if (printHelp) {
-                break;
+                default:
+                    throw new IllegalArgumentException("Unknown value for design type.");
             }
         }
-
-        if (pathToFile.isEmpty()) {
-            return;
-        }
-
-        sourceFile = new File(pathToFile);*/
-
-    }
-
-    private boolean getPrintHelp() {
-        return printHelp;
-    }
-
-    public File getSourceFile() {
-        return sourceFile;
-    }
-
-    private void setPrintHelp(boolean printHelp) {
-        this.printHelp = printHelp;
     }
 
     private void checkSourceFile() throws FileNotFoundException {
 
-        Path path = Paths.get(sourceFile.toURI());
+        Path path = Paths.get(SOURCE_FILE.toURI());
         if (Files.notExists(path)) {
-            throw new FileNotFoundException("no such file " + sourceFile.getPath());
+            throw new FileNotFoundException("no such file " + SOURCE_FILE.getPath());
         }
 
-    }
-
-    enum SchemaDesign {
-        RUSSIAN_DOLL,
-        SALAMI_SLICE,
-        VENETIAN_BLIND
     }
 }
