@@ -61,7 +61,7 @@ public class XsdSchema {
         Option outputOption = new Option("o", "output", true, "output xsd file path");
         options.addOption(outputOption);
 
-        Option nameSpaceOption = new Option("n", "name-space", true, "target name space");
+        Option nameSpaceOption = new Option("n", "namespace", true, "target name space");
         options.addOption(nameSpaceOption);
 
         Option schemaOption = new Option("s", "schema-design", true,
@@ -89,7 +89,7 @@ public class XsdSchema {
             this.OUTPUT_FILE = new File(outputFile);
         }
 
-        String ns = cmd.getOptionValue("name-space");
+        String ns = cmd.getOptionValue("namespace");
         NAME_SPACE = ns != null ? ns : "http://v8.default.com";
 
         String schema = cmd.getOptionValue("schema-design");
