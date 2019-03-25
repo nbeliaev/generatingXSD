@@ -1,5 +1,5 @@
 # generatingXSD
-The utility generates an xsd schema based on xml file.
+The utility generates an xsd schema based on xml file. Based on [Apache XMLBeans](https://xmlbeans.apache.org/).
 ## Supported features
 - Scheme specification (Russian doll, Salami slice, Venetian blind)  
 - Target namespace specification
